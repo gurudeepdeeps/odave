@@ -8,7 +8,7 @@ const inspirationLooks = [
     rawImage: 'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80',
     modelImages: [
       'https://images.unsplash.com/photo-1635767798638-3e25273a8236?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1620336655055-b57986f7f795?auto=format&fit=crop&w=900&q=80',
+      'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80',
     ],
   },
   {
@@ -17,14 +17,6 @@ const inspirationLooks = [
     modelImages: [
       'https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?auto=format&fit=crop&w=900&q=80',
       'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80',
-    ],
-  },
-  {
-    id: 3,
-    rawImage: 'https://images.unsplash.com/photo-1627293509201-0ff91f3d1d2f?auto=format&fit=crop&w=900&q=80',
-    modelImages: [
-      'https://images.unsplash.com/photo-1617038260687-4f2f9702f3dd?auto=format&fit=crop&w=900&q=80',
-      'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?auto=format&fit=crop&w=900&q=80',
     ],
   },
 ]

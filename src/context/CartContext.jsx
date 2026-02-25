@@ -15,6 +15,8 @@ function calculateDays(startDate, endDate) {
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState([])
+  const [promoCode, setPromoCode] = useState('')
+  const [promoDiscount, setPromoDiscount] = useState(0)
 
   const addToCart = (product, rentalStart, rentalEnd, size = '') => {
     const key = `${product.id}-${rentalStart || ''}-${rentalEnd || ''}-${size}`
@@ -72,7 +74,30 @@ export function CartProvider({ children }) {
   )
 
   const deliveryFee = subtotal >= DELIVERY_THRESHOLD || subtotal === 0 ? 0 : DELIVERY_FEE
-  const total = subtotal + securityDeposit + deliveryFee
+  const discount = Math.floor(subtotal * (promoDiscount / 100))
+  const total = subtotal + securityDeposit + deliveryFee - discount
+
+  const applyPromoCode = (code) => {
+    const upperCode = code.trim().toUpperCase()
+    const promoCodes = {
+      'ODAVE10': 10,
+      'ODAVE15': 15,
+      'ODAVE50': 50,
+      'WEDDING25': 25,
+    }
+    
+    if (promoCodes[upperCode]) {
+      setPromoCode(upperCode)
+      setPromoDiscount(promoCodes[upperCode])
+      return { success: true, discount: promoCodes[upperCode] }
+    }
+    return { success: false, discount: 0 }
+  }
+
+  const removePromoCode = () => {
+    setPromoCode('')
+    setPromoDiscount(0)
+  }
 
   const value = useMemo(
     () => ({
@@ -84,10 +109,15 @@ export function CartProvider({ children }) {
       subtotal,
       securityDeposit,
       deliveryFee,
+      discount,
       total,
       cartCount: items.reduce((sum, item) => sum + item.quantity, 0),
+      promoCode,
+      promoDiscount,
+      applyPromoCode,
+      removePromoCode,
     }),
-    [items, subtotal, securityDeposit, deliveryFee, total],
+    [items, subtotal, securityDeposit, deliveryFee, discount, total, promoCode, promoDiscount],
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

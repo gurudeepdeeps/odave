@@ -1,11 +1,14 @@
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2, X } from 'lucide-react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Button from '../components/ui/Button.jsx'
 import { useCart } from '../context/CartContext.jsx'
 
 export default function Cart() {
   const navigate = useNavigate()
-  const { items, removeFromCart, calculateDays, subtotal, securityDeposit, deliveryFee, total } = useCart()
+  const { items, removeFromCart, calculateDays, subtotal, securityDeposit, deliveryFee, discount, total, promoCode, promoDiscount, applyPromoCode, removePromoCode } = useCart()
+  const [promoInput, setPromoInput] = useState('')
+  const [promoMessage, setPromoMessage] = useState('')
 
   const handleBack = () => {
     if (window.history.length > 1) {
@@ -13,6 +16,23 @@ export default function Cart() {
       return
     }
     navigate('/collections')
+  }
+
+  const handleApplyPromo = () => {
+    const result = applyPromoCode(promoInput)
+    if (result.success) {
+      setPromoMessage(`${result.discount}% discount applied!`)
+      setPromoInput('')
+    } else {
+      setPromoMessage('Invalid promo code')
+    }
+    setTimeout(() => setPromoMessage(''), 3000)
+  }
+
+  const handleRemovePromo = () => {
+    removePromoCode()
+    setPromoMessage('Promo code removed')
+    setTimeout(() => setPromoMessage(''), 3000)
   }
 
   if (items.length === 0) {
@@ -66,9 +86,46 @@ export default function Cart() {
             <p className="flex justify-between"><span>Subtotal</span><span>₹{subtotal.toLocaleString('en-IN')}</span></p>
             <p className="flex justify-between"><span>Security Deposit</span><span>₹{securityDeposit.toLocaleString('en-IN')}</span></p>
             <p className="flex justify-between"><span>Delivery Fee</span><span>{deliveryFee === 0 ? 'Waived' : `₹${deliveryFee}`}</span></p>
+            {discount > 0 && (
+              <p className="flex justify-between text-green-400">
+                <span>Discount ({promoDiscount}%)</span>
+                <span>-₹{discount.toLocaleString('en-IN')}</span>
+              </p>
+            )}
             <p className="flex justify-between border-t border-od-border pt-3 text-od-gold"><span>Total</span><span>₹{total.toLocaleString('en-IN')}</span></p>
           </div>
-          <input placeholder="Promo code" className="mt-5 w-full border border-od-border bg-transparent px-3 py-2 text-sm" />
+          
+          {promoCode ? (
+            <div className="mt-5 flex items-center justify-between border border-green-400 bg-green-400/10 px-3 py-2 text-sm">
+              <span className="text-green-400">{promoCode} applied</span>
+              <button onClick={handleRemovePromo} className="text-od-ivory-muted hover:text-od-error">
+                <X size={16} />
+              </button>
+            </div>
+          ) : (
+            <div className="mt-5">
+              <div className="flex gap-2">
+                <input 
+                  value={promoInput}
+                  onChange={(e) => setPromoInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyPromo()}
+                  placeholder="Promo code" 
+                  className="flex-1 border border-od-border bg-transparent px-3 py-2 text-sm" 
+                />
+                <button 
+                  onClick={handleApplyPromo}
+                  className="border border-od-border px-4 text-sm uppercase tracking-luxe transition hover:border-od-gold hover:text-od-gold"
+                >
+                  Apply
+                </button>
+              </div>
+              {promoMessage && (
+                <p className={`mt-2 text-xs ${promoMessage.includes('Invalid') ? 'text-od-error' : 'text-green-400'}`}>
+                  {promoMessage}
+                </p>
+              )}
+            </div>
+          )}
           <Link to="/contact" className="block">
             <Button className="mt-4 w-full">Proceed to Checkout</Button>
           </Link>

@@ -25,12 +25,24 @@ function App() {
 
   useEffect(() => {
     if (location.hash) {
-      const element = document.querySelector(location.hash)
-      if (element) {
-        requestAnimationFrame(() => {
+      let attempts = 0
+      const maxAttempts = 20
+
+      const scrollToHashTarget = () => {
+        const element = document.querySelector(location.hash)
+
+        if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        })
+          return
+        }
+
+        attempts += 1
+        if (attempts < maxAttempts) {
+          requestAnimationFrame(scrollToHashTarget)
+        }
       }
+
+      requestAnimationFrame(scrollToHashTarget)
       return
     }
 

@@ -22,6 +22,12 @@ export default function ProductDetail() {
   const [openAccordion, setOpenAccordion] = useState(accordions[0])
 
   const product = products.find((item) => item.id === productId) || products[0]
+  
+  const handleRentNow = () => {
+    addToCart(product, startDate, endDate, size)
+    navigate('/cart')
+  }
+  
   const related = products.filter((item) => item.category === product.category && item.id !== product.id).slice(0, 4)
   const days = calculateDays(startDate, endDate)
   const rentalTotal = useMemo(() => product.pricePerDay * days, [product.pricePerDay, days])
@@ -84,7 +90,8 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-6 grid gap-2">
-            <Button className="w-full" onClick={() => addToCart(product, startDate, endDate, size)}>Add to Rental Cart</Button>
+            <Button className="w-full" onClick={handleRentNow}>Rent Now</Button>
+            <Button variant="ghost" className="w-full" onClick={() => addToCart(product, startDate, endDate, size)}>Add to Rental Cart</Button>
             <Button variant="ghost" className="w-full" onClick={() => toggleWishlist(product.id)}>Add to Wishlist</Button>
           </div>
 

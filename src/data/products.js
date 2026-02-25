@@ -1,33 +1,30 @@
-const cdn = 'https://images.unsplash.com'
+import necklace1 from '../assets/images/necklace-1.png'
+import necklace2 from '../assets/images/necklace-2.png'
+import necklace3 from '../assets/images/necklace-3.png'
+import necklace4 from '../assets/images/necklace-4.png'
+import earrings1 from '../assets/images/earrings-1.png'
+import earrings2 from '../assets/images/earrings-2.png'
+import earrings3 from '../assets/images/earrings-3.png'
+import earrings4 from '../assets/images/earrings-4.png'
+import earrings5 from '../assets/images/earrings-5.png'
+import ring1 from '../assets/images/ring-1.png'
+import ring2 from '../assets/images/ring-2.png'
+import ring3 from '../assets/images/ring-3.png'
+import ring4 from '../assets/images/ring-4.png'
+import bracelets1 from '../assets/images/bracelets-1.png'
+import bracelets2 from '../assets/images/bracelets-2.png'
+import bracelets3 from '../assets/images/bracelets-3.png'
+import sets1 from '../assets/images/sets-1.png'
+import sets2 from '../assets/images/sets-2.png'
+import tiaras1 from '../assets/images/tiaras-1.png'
 
 const imageSets = {
-  necklaces: [
-    'photo-1617038220319-276d3cfab638',
-    'photo-1515562141207-7a88fb7ce338',
-    'photo-1620336655055-b57986f7f795',
-    'photo-1617038260897-41a1f14a8ca0',
-    'photo-1612817288484-6f916006741a',
-  ],
-  earrings: [
-    'photo-1635767798638-3e25273a8236',
-    'photo-1635767798637-865aa37b8ca3',
-    'photo-1573408301185-9146fe634ad0',
-    'photo-1611095973763-414019e72400',
-    'photo-1611085583191-a3b181a88401',
-  ],
-  rings: [
-    'photo-1605100804763-247f67b3557e',
-    'photo-1588444837495-c6cfeb53f32d',
-    'photo-1599643477877-530eb83abc8e',
-    'photo-1602173574767-37ac01994b2a',
-  ],
-  bracelets: [
-    'photo-1619119069152-a2b331eb392a',
-    'photo-1611652022419-a9419f74343d',
-    'photo-1627293509201-0ff91f3d1d2f',
-  ],
-  sets: ['photo-1596944924616-7b38e7cfac36', 'photo-1611107683227-e9060eccd846'],
-  tiaras: ['photo-1617038260687-4f2f9702f3dd'],
+  necklaces: [necklace1, necklace2, necklace3, necklace4],
+  earrings: [earrings1, earrings2, earrings3, earrings4, earrings5],
+  rings: [ring1, ring2, ring3, ring4],
+  bracelets: [bracelets1, bracelets2, bracelets3],
+  sets: [sets1, sets2],
+  tiaras: [tiaras1],
 }
 
 const baseProducts = [
@@ -62,19 +59,11 @@ const categoryImageKey = {
   Tiaras: 'tiaras',
 }
 
-const makeImageUrl = (id) => `${cdn}/${id}?auto=format&fit=crop&w=1000&q=80`
-
 function buildImages(category, index) {
   const key = categoryImageKey[category]
-  const ids = imageSets[key]
-  const base = ids[index % ids.length]
-  return [
-    makeImageUrl(base),
-    makeImageUrl(base),
-    makeImageUrl(base),
-    makeImageUrl(base),
-    makeImageUrl(base),
-  ]
+  const images = imageSets[key]
+  const base = images[index % images.length]
+  return [base, base, base, base, base]
 }
 
 export const products = baseProducts.map(([id, name, category, occasion, pricePerDay, badge, featured], index) => ({

@@ -1,5 +1,5 @@
 import { Heart, ShoppingBag } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useWishlist } from '../../context/WishlistContext.jsx'
 import { useCart } from '../../context/CartContext.jsx'
 import Badge from './Badge.jsx'
@@ -8,6 +8,12 @@ import Button from './Button.jsx'
 export default function ProductCard({ product }) {
   const { isWishlisted, toggleWishlist } = useWishlist()
   const { addToCart } = useCart()
+  const navigate = useNavigate()
+
+  const handleRentNow = () => {
+    addToCart(product)
+    navigate('/cart')
+  }
 
   return (
     <article className="group overflow-hidden border border-od-border bg-od-card transition duration-300 hover:-translate-y-1 hover:border-od-gold hover:shadow-luxe">
@@ -60,7 +66,7 @@ export default function ProductCard({ product }) {
             </Link>
           </div>
           <div className="col-span-2">
-            <Button className="flex w-full items-center justify-center text-center" onClick={() => addToCart(product)}>Rent Now</Button>
+            <Button className="flex w-full items-center justify-center text-center" onClick={handleRentNow}>Rent Now</Button>
           </div>
         </div>
       </div>

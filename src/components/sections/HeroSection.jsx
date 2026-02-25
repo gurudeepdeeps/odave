@@ -1,6 +1,8 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Button from '../ui/Button.jsx'
+import homeHero from '../../assets/images/home-hero.png'
+import jbl from '../../assets/images/jbl.png'
 
 export default function HeroSection() {
   const { scrollY } = useScroll()
@@ -10,13 +12,15 @@ export default function HeroSection() {
     <section className="relative min-h-screen overflow-hidden border-b border-od-border">
       <motion.div
         style={{ y }}
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0"
       >
         <div
           className="h-full w-full"
           style={{
-            backgroundImage:
-              'linear-gradient(90deg, rgba(10,8,4,0.86), rgba(10,8,4,0.4)), url(https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=2000&q=80)',
+            backgroundImage: `linear-gradient(90deg, rgba(10,8,4,0.86), rgba(10,8,4,0.4)), url(${jbl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            backgroundRepeat: 'no-repeat',
           }}
         />
       </motion.div>
@@ -39,7 +43,7 @@ export default function HeroSection() {
 
         <div className="relative">
           <img
-            src="https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=1000&q=80"
+            src={homeHero}
             alt="Jewellery editorial"
             className="h-[560px] w-full object-cover"
           />

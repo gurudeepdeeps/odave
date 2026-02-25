@@ -1,8 +1,9 @@
 import { Heart, Menu, Search, ShoppingBag, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/CartContext.jsx'
 import { useWishlist } from '../../context/WishlistContext.jsx'
+import { products } from '../../data/products.js'
 
 const navItems = [
   { label: 'Collections', to: '/collections' },
@@ -26,8 +27,19 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { cartCount } = useCart()
   const { wishlistIds } = useWishlist()
+  const navigate = useNavigate()
+
+  const filteredProducts = searchQuery.trim()
+    ? products.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.occasion.some((occ) => occ.toLowerCase().includes(searchQuery.toLowerCase()))
+      ).slice(0, 8)
+    : []
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 80)
@@ -35,8 +47,27 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (searchOpen) {
+      setSearchQuery('')
+    }
+  }, [searchOpen])
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleNavClick = (to) => {
+    // Don't scroll to top if it's a hash link
+    if (!to.includes('#')) {
+      scrollToTop()
+    }
+  }
+
+  const handleProductClick = (productId) => {
+    setSearchOpen(false)
+    setSearchQuery('')
+    navigate(`/collections/${productId}`)
   }
 
   return (
@@ -52,7 +83,7 @@ export default function Navbar() {
             <NavLink
               key={item.label}
               to={item.to}
-              onClick={scrollToTop}
+              onClick={() => handleNavClick(item.to)}
               className="group relative"
             >
               {item.label}
@@ -91,7 +122,7 @@ export default function Navbar() {
                   key={item.label}
                   to={item.to}
                   onClick={() => {
-                    scrollToTop()
+                    handleNavClick(item.to)
                     setMobileOpen(false)
                   }}
                   className="reveal-item"
@@ -108,12 +139,45 @@ export default function Navbar() {
 
       {searchOpen && (
         <div className="fixed inset-0 z-[80] flex items-start justify-center bg-black/70 p-6 backdrop-blur-sm" onClick={() => setSearchOpen(false)}>
-          <div className="mt-20 w-full max-w-2xl border border-od-border bg-od-surface p-4" onClick={(event) => event.stopPropagation()}>
-            <input
-              autoFocus
-              className="w-full border border-od-border bg-transparent px-4 py-3 text-od-ivory outline-none placeholder:text-od-ivory-muted"
-              placeholder="Search exquisite pieces..."
-            />
+          <div className="mt-20 w-full max-w-2xl" onClick={(event) => event.stopPropagation()}>
+            <div className="border border-od-border bg-od-surface p-4">
+              <input
+                autoFocus
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full border border-od-border bg-transparent px-4 py-3 text-od-ivory outline-none placeholder:text-od-ivory-muted"
+                placeholder="Search exquisite pieces..."
+              />
+            </div>
+            
+            {filteredProducts.length > 0 && (
+              <div className="mt-2 max-h-[60vh] overflow-y-auto border border-od-border bg-od-surface">
+                {filteredProducts.map((product) => (
+                  <button
+                    key={product.id}
+                    type="button"
+                    onClick={() => handleProductClick(product.id)}
+                    className="flex w-full items-center gap-4 border-b border-od-border p-4 text-left transition hover:bg-od-card"
+                  >
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="h-16 w-16 object-cover"
+                    />
+                    <div className="flex-1">
+                      <p className="font-display text-lg text-od-ivory">{product.name}</p>
+                      <p className="text-sm text-od-ivory-muted">{product.category} · ₹{product.pricePerDay}/day</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {searchQuery.trim() && filteredProducts.length === 0 && (
+              <div className="mt-2 border border-od-border bg-od-surface p-8 text-center">
+                <p className="text-od-ivory-muted">No products found for "{searchQuery}"</p>
+              </div>
+            )}
           </div>
         </div>
       )}

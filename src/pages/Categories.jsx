@@ -1,12 +1,18 @@
 import { Link } from 'react-router-dom'
+import necklaceCover from '../assets/images/necklace-cover.png'
+import earringsCover from '../assets/images/earrings-cover.png'
+import ringCover from '../assets/images/ring-cover.png'
+import braceletsCover from '../assets/images/bracelets-cover.png'
+import setsCover from '../assets/images/sets-cover.png'
+import tiarasCover from '../assets/images/tiaras-cover.png'
 
 const categoryCards = [
-  ['Necklaces', 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=900&q=80'],
-  ['Earrings', 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=900&q=80'],
-  ['Rings', 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=900&q=80'],
-  ['Bracelets', 'https://images.unsplash.com/photo-1619119069152-a2b331eb392a?auto=format&fit=crop&w=900&q=80'],
-  ['Sets', 'https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?auto=format&fit=crop&w=900&q=80'],
-  ['Tiaras', 'https://images.unsplash.com/photo-1617038260687-4f2f9702f3dd?auto=format&fit=crop&w=900&q=80'],
+  ['Necklaces', necklaceCover],
+  ['Earrings', earringsCover],
+  ['Rings', ringCover],
+  ['Bracelets', braceletsCover],
+  ['Sets', setsCover],
+  ['Tiaras', tiarasCover],
 ]
 
 export default function Categories() {
