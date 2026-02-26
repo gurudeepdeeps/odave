@@ -1,25 +1,14 @@
 import { ArrowRight, Instagram, PinIcon, Youtube } from 'lucide-react'
-import { useState } from 'react'
+
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleNewsletterSubmit = (event) => {
-    event.preventDefault()
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setMessage('Enter a valid email.')
-      return
-    }
 
-    setMessage('Subscribed successfully.')
-    setEmail('')
-  }
 
   return (
     <footer className="bg-[#0d0b08]">
@@ -56,22 +45,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
-            <p className="text-xs uppercase tracking-luxe text-od-gold">Newsletter</p>
-            <p className="mt-4 text-sm text-od-ivory-muted">Receive curated drops and private event edits.</p>
-            <form className="mt-4 flex border border-od-border" onSubmit={handleNewsletterSubmit}>
-              <input
-                className="w-full bg-transparent px-3 py-2 text-sm outline-none placeholder:text-od-ivory-muted"
-                placeholder="Email address"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <button type="submit" className="border-l border-od-border px-3 text-od-gold" aria-label="Subscribe">
-                <ArrowRight size={16} />
-              </button>
-            </form>
-            {message ? <p className="mt-2 text-xs text-od-ivory-muted">{message}</p> : null}
-          </div>
+          {/* Newsletter section removed as requested */}
         </div>
 
         <div className="mt-12 border-t border-od-border pt-6 text-xs text-od-ivory-muted">

@@ -3,7 +3,7 @@ import CategorySection from '../components/sections/CategorySection.jsx'
 import FeaturedCollection from '../components/sections/FeaturedCollection.jsx'
 import HowItWorks from '../components/sections/HowItWorks.jsx'
 import Testimonials from '../components/sections/Testimonials.jsx'
-import NewsletterBanner from '../components/sections/NewsletterBanner.jsx'
+
 import useScrollReveal from '../hooks/useScrollReveal.js'
 
 export default function Home() {
@@ -27,7 +27,7 @@ export default function Home() {
       <div data-reveal className="reveal-item"><FeaturedCollection /></div>
       <div data-reveal className="reveal-item"><HowItWorks /></div>
       <div data-reveal className="reveal-item"><Testimonials /></div>
-      <div data-reveal className="reveal-item"><NewsletterBanner /></div>
+
     </main>
   )
 }
