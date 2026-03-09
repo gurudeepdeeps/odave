@@ -34,10 +34,15 @@ export default function Navbar() {
   const { wishlistIds } = useWishlist()
   const navigate = useNavigate()
   const [user, setUser] = useState(null);
+    const [toast, setToast] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+        if (currentUser && toast !== 'login') {
+          setToast('login');
+          setTimeout(() => setToast(null), 3000);
+        }
     });
     return () => unsubscribe();
   }, []);
@@ -82,6 +87,11 @@ export default function Navbar() {
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-od-bg/95 backdrop-blur-md border-b border-od-border' : 'bg-transparent'}`}>
+        {toast && (
+          <div className="fixed top-6 right-6 z-[100] bg-od-gold text-black font-bold px-6 py-3 rounded shadow-lg animate-fade-in">
+            {toast === 'login' ? 'Login successful!' : 'Logout successful!'}
+          </div>
+        )}
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-4 lg:px-10">
         <Link to="/" className="group" onClick={scrollToTop}>
           <p className="font-display text-3xl tracking-[0.24em]">ODAVE</p>
@@ -104,6 +114,8 @@ export default function Navbar() {
             <button
               onClick={() => {
                 signOut(auth);
+                  setToast('logout');
+                  setTimeout(() => setToast(null), 3000);
                 navigate('/');
               }}
               className="group relative uppercase font-bold text-od-gold border border-od-gold px-4 py-2 rounded hover:bg-od-gold hover:text-black transition"

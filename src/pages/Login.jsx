@@ -1,5 +1,6 @@
-// Error boundary component
-import React, { Component, useState, useRef, useEffect } from 'react';
+import React, { Component, useState, useEffect } from 'react';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../firebase';
 
 class LoginErrorBoundary extends Component {
   constructor(props) {
@@ -27,19 +28,21 @@ class LoginErrorBoundary extends Component {
     return this.props.children;
   }
 }
-// ...existing code...
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../firebase';
 
-const Login = () => {
+function Login() {
   const [error, setError] = useState('');
+  const [toast, setToast] = useState(null);
 
   const handleGoogleSignIn = async () => {
     setError('');
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      window.location.href = '/'; // Redirect to home page
+      setToast('login');
+      setTimeout(() => {
+        setToast(null);
+        window.location.href = '/';
+      }, 2000);
     } catch (err) {
       setError(err.message);
       console.error('Google Sign-In Error:', err);
@@ -48,6 +51,11 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-od-bg text-od-ivory">
+      {toast && (
+        <div className="fixed top-6 right-6 z-[100] bg-od-gold text-black font-bold px-6 py-3 rounded shadow-lg animate-fade-in">
+          Login successful!
+        </div>
+      )}
       <div className="w-full max-w-md p-8 rounded-xl shadow-lg bg-od-ivory/90 backdrop-blur-lg border border-od-gold">
         <div className="flex flex-col items-center mb-8">
           <span className="text-4xl font-serif font-bold text-od-gold tracking-widest mb-2">ODAVE</span>
@@ -73,9 +81,8 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
-// Wrap Login in error boundary
 const WrappedLogin = () => (
   <LoginErrorBoundary>
     <Login />
