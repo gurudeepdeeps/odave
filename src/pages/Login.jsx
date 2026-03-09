@@ -34,27 +34,25 @@ import { auth } from '../firebase';
 const Login = () => {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
-  const [error, setError] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
-  // Remove RecaptchaVerifier initialization from useEffect
+  const [error, setError] = useState('');
+
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        size: 'normal',
+        callback: () => {},
+      }, auth);
+      window.recaptchaVerifier.render());
+    }
+  };
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setError('');
-    if (!phone) {
-      setError('Please enter your phone number.');
-      return;
-    }
+    setupRecaptcha();
+    const appVerifier = window.recaptchaVerifier;
     try {
-      // Setup reCAPTCHA only when needed
-      if (!window.recaptchaVerifier) {
-        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-          size: 'normal',
-          callback: () => {},
-        }, auth);
-        await window.recaptchaVerifier.render();
-      }
-      const appVerifier = window.recaptchaVerifier;
       const result = await signInWithPhoneNumber(auth, phone, appVerifier);
       setConfirmationResult(result);
       alert('OTP sent!');
@@ -66,10 +64,6 @@ const Login = () => {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError('');
-    if (!otp || !confirmationResult) {
-      setError('Please enter the OTP.');
-      return;
-    }
     try {
       await confirmationResult.confirm(otp);
       alert('Phone login successful!');
