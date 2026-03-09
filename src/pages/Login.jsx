@@ -43,7 +43,7 @@ const Login = () => {
         size: 'normal',
         callback: () => {},
       }, auth);
-      window.recaptchaVerifier.render());
+      window.recaptchaVerifier.render();
     }
   };
 
