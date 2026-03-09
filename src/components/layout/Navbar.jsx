@@ -4,6 +4,8 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/CartContext.jsx'
 import { useWishlist } from '../../context/WishlistContext.jsx'
 import { products } from '../../data/products.js'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 const navItems = [
   { label: 'Collections', to: '/collections' },
@@ -12,7 +14,6 @@ const navItems = [
   { label: 'How It Works', to: '/#how-it-works' },
   { label: 'About', to: '/about' },
   { label: 'Contact', to: '/contact' },
-  { label: 'Login', to: '/login' },
 ]
 
 function CounterBadge({ count }) {
@@ -32,6 +33,14 @@ export default function Navbar() {
   const { cartCount } = useCart()
   const { wishlistIds } = useWishlist()
   const navigate = useNavigate()
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const filteredProducts = searchQuery.trim()
     ? products.filter(
@@ -91,6 +100,24 @@ export default function Navbar() {
               <span className="absolute -bottom-1 left-0 h-px w-0 bg-od-gold transition-all duration-300 group-hover:w-full" />
             </NavLink>
           ))}
+          {user ? (
+            <button
+              onClick={() => {
+                signOut(auth);
+                navigate('/');
+              }}
+              className="group relative uppercase font-bold text-od-gold border border-od-gold px-4 py-2 rounded hover:bg-od-gold hover:text-black transition"
+            >
+              Logout
+            </button>
+          ) : (
+            <NavLink
+              to="/login"
+              className="group relative uppercase font-bold text-od-gold border border-od-gold px-4 py-2 rounded hover:bg-od-gold hover:text-black transition"
+            >
+              Login
+            </NavLink>
+          )}
         </nav>
 
         <div className="flex items-center gap-3">
