@@ -12,6 +12,7 @@ const navItems = [
   { label: 'How It Works', to: '/#how-it-works' },
   { label: 'About', to: '/about' },
   { label: 'Contact', to: '/contact' },
+  { label: 'Login', to: '/login' },
 ]
 
 function CounterBadge({ count }) {

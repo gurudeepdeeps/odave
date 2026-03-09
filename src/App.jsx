@@ -18,6 +18,7 @@ import SizingGuide from './pages/SizingGuide.jsx'
 import Inspiration from './pages/Inspiration.jsx'
 import Occasions from './pages/Occasions.jsx'
 import Categories from './pages/Categories.jsx'
+import Login from './pages/Login.jsx'
 
 function App() {
   const location = useLocation()
@@ -96,6 +97,7 @@ function App() {
           <Route path="/shipping" element={<PageWrapper><Shipping /></PageWrapper>} />
           <Route path="/returns" element={<PageWrapper><Returns /></PageWrapper>} />
           <Route path="/sizing-guide" element={<PageWrapper><SizingGuide /></PageWrapper>} />
+          <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
       <Footer />
