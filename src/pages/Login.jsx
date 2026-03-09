@@ -39,8 +39,7 @@ const Login = () => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      // Redirect or show success message
-      alert('Google sign-in successful!');
+      window.location.href = '/'; // Redirect to home page
     } catch (err) {
       setError(err.message);
       console.error('Google Sign-In Error:', err);
