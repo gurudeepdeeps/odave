@@ -58,6 +58,7 @@ const Login = () => {
       alert('OTP sent!');
     } catch (err) {
       setError(err.message);
+      console.error('OTP Send Error:', err);
     }
   };
 
@@ -69,6 +70,7 @@ const Login = () => {
       alert('Phone login successful!');
     } catch (err) {
       setError(err.message);
+      console.error('OTP Verify Error:', err);
     }
   };
 
