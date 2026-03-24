@@ -24,22 +24,48 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!formData.fullName || !/^\S+@\S+\.\S+$/.test(formData.email)) {
-      setSubmitMessage('Please provide a valid name and email.')
-      return
+      setSubmitMessage('Please provide a valid name and email.');
+      return;
     }
 
-    setSubmitMessage('Thank you. Our concierge will contact you shortly.')
-    setFormData({
-      fullName: '',
-      email: '',
-      phone: '',
-      preferredDate: '',
-      occasion: 'Wedding',
-      message: '',
-    })
+    setSubmitMessage('Sending...');
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: 'b4e42a1a-21fe-4f87-8ced-7851d464452d',
+          name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          preferred_date: formData.preferredDate,
+          occasion: formData.occasion,
+          message: formData.message,
+          subject: 'New Contact Form Submission from ODAVE',
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        setSubmitMessage('Thank you! Your message has been sent. Our concierge will contact you shortly.');
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          preferredDate: '',
+          occasion: 'Wedding',
+          message: '',
+        });
+      } else {
+        setSubmitMessage('Sorry, there was a problem sending your message. Please try again later.');
+      }
+    } catch (error) {
+      setSubmitMessage('Sorry, there was a problem sending your message. Please try again later.');
+    }
   }
 
   const whatsappMessage = [
