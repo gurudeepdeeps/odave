@@ -17,7 +17,8 @@ export default function Contact() {
     occasion: 'Wedding',
     message: '',
   })
-  const [submitMessage, setSubmitMessage] = useState('')
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [submitStatus, setSubmitStatus] = useState(""); // '', 'success', 'error', 'loading'
 
   const handleInputChange = (event) => {
     const { name, value } = event.target
@@ -27,46 +28,51 @@ export default function Contact() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!formData.fullName || !/^\S+@\S+\.\S+$/.test(formData.email)) {
-      setSubmitMessage('Please provide a valid name and email.');
+      setSubmitMessage("Please provide a valid name and email.");
+      setSubmitStatus("error");
       return;
     }
 
-    setSubmitMessage('Sending...');
+    setSubmitMessage("Sending...");
+    setSubmitStatus("loading");
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          access_key: 'b4e42a1a-21fe-4f87-8ced-7851d464452d',
+          access_key: "b4e42a1a-21fe-4f87-8ced-7851d464452d",
           name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
           preferred_date: formData.preferredDate,
           occasion: formData.occasion,
           message: formData.message,
-          subject: 'New Contact Form Submission from ODAVE',
+          subject: "New Contact Form Submission from ODAVE",
         }),
       });
       const result = await response.json();
       if (result.success) {
-        setSubmitMessage('Thank you! Your message has been sent. Our concierge will contact you shortly.');
+        setSubmitMessage("Thank you! Your message has been sent. Our concierge will contact you shortly.");
+        setSubmitStatus("success");
         setFormData({
-          fullName: '',
-          email: '',
-          phone: '',
-          preferredDate: '',
-          occasion: 'Wedding',
-          message: '',
+          fullName: "",
+          email: "",
+          phone: "",
+          preferredDate: "",
+          occasion: "Wedding",
+          message: "",
         });
       } else {
-        setSubmitMessage('Sorry, there was a problem sending your message. Please try again later.');
+        setSubmitMessage("Sorry, there was a problem sending your message. Please try again later.");
+        setSubmitStatus("error");
       }
     } catch (error) {
-      setSubmitMessage('Sorry, there was a problem sending your message. Please try again later.');
+      setSubmitMessage("Sorry, there was a problem sending your message. Please try again later.");
+      setSubmitStatus("error");
     }
-  }
+  };
 
   const whatsappMessage = [
     'Hello ODAVE team, I want to enquire about jewellery rental.',
@@ -99,7 +105,19 @@ export default function Contact() {
           </select>
           <textarea name="message" value={formData.message} onChange={handleInputChange} rows={5} placeholder="Message" className="w-full border border-od-border bg-transparent px-4 py-3" />
           <Button type="submit">Send Message</Button>
-          {submitMessage ? <p className="text-sm text-od-ivory-muted">{submitMessage}</p> : null}
+          {submitMessage ? (
+            <p
+              className={`text-sm mt-2 ${
+                submitStatus === "success"
+                  ? "text-green-500"
+                  : submitStatus === "error"
+                  ? "text-red-500"
+                  : "text-od-ivory-muted"
+              }`}
+            >
+              {submitMessage}
+            </p>
+          ) : null}
         </form>
 
         <aside className="space-y-4 border border-od-border p-6">
